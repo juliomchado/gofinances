@@ -7,11 +7,11 @@ import {
     Avatar,
     User,
     UserGreeting,
-    UserName
+    UserName,
+    Icon
 } from './styles';
 
 export function Dashboard() {
-
     return (
         <Container>
             <Header>
@@ -23,6 +23,7 @@ export function Dashboard() {
                             <UserName>Julio</UserName>
                         </User>
                     </UserInfo>
+                    <Icon name="power" />
                 </UserWrapper>
             </Header>
         </Container >

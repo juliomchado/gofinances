@@ -3,13 +3,11 @@ import styled, { css } from 'styled-components/native';
 import { Feather } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
-import theme from '../../../global/styles/theme';
 
 interface TransactionProps {
     type: 'up' | 'down';
     isActive: boolean;
 }
-
 
 export const Container = styled(TouchableOpacity) <TransactionProps>`
     width: 48%;
@@ -18,7 +16,7 @@ export const Container = styled(TouchableOpacity) <TransactionProps>`
     align-items: center;
     justify-content: center;
 
-    border-width: ${({ isActive }) => isActive ? 0 : 1.5}px ;
+    border-width: ${({ isActive }) => isActive ? 0 : 1}px ;
     border-style: solid;
     border-color: ${({ theme }) => theme.colors.text};
     border-radius: 5px;
@@ -33,7 +31,6 @@ export const Container = styled(TouchableOpacity) <TransactionProps>`
         background-color: ${({ theme }) => theme.colors.success_light}`
     };
 
-    
 `;
 
 export const Icon = styled(Feather) <TransactionProps>`

@@ -78,7 +78,7 @@ export function Register() {
             return Alert.alert('Selecione o tipo da transação');
 
         if (category.key === 'category')
-            return Alert.alert('Selecione o tipo da transação');
+            return Alert.alert('Selecione uma categoria');
 
         const data = {
             name: form.name,

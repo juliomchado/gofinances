@@ -1,9 +1,11 @@
 import React from 'react';
 import AppLoading from 'expo-app-loading';
+import 'react-native-gesture-handler';
 
 import { ThemeProvider } from 'styled-components';
 
 import { Register } from './src/screens/Register';
+import { Dashboard } from './src/screens/Dashboard';
 
 import {
   useFonts,

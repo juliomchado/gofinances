@@ -30,11 +30,11 @@ export const Container = styled.View <TransactionProps>`
 
 `;
 
-export const Button = styled(RectButton) <TransactionProps>`
+export const Button = styled(RectButton)`
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    
+
     padding: 16px;
 
 `;

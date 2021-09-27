@@ -22,7 +22,6 @@ import { InputForm } from '../../components/Form/InputForm';
 import { TransactionTypeButton } from '../../components/Form/TransactionTypeButton';
 import { CategorySelect } from '../CategorySelect';
 
-
 import {
     Container,
     Header,
@@ -58,8 +57,6 @@ export function Register() {
         key: 'category',
         name: 'Categoria',
     }
-
-    const collectionKey = '@gofinances:transactions';
 
     const navigation = useNavigation<NavigationProps>();
 
@@ -106,6 +103,8 @@ export function Register() {
         }
 
         try {
+            const collectionKey = '@gofinances:transactions';
+
             const data = await AsyncStorage.getItem(collectionKey);
 
             const currentData = data ? JSON.parse(data) : [];
@@ -113,7 +112,9 @@ export function Register() {
             const dataFormatted = [
                 ...currentData,
                 newTransaction
-            ]
+            ];
+
+            console.log(category.key);
 
             await AsyncStorage.setItem(collectionKey, JSON.stringify(dataFormatted));
 

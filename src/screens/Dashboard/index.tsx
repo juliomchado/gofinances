@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { HighlightCard } from '../../components/HighlightCard';
 import { TransactionCard, TransactionCardProps } from '../../components/TransactionCard';
-// import { AsyncStorage } from '@react-native-async-storage/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import {
     Container,
     Header,
@@ -19,62 +20,53 @@ import {
     Transactions,
 } from './styles';
 
+import { formatAmountToReal } from '../../utils/formatAmountToReal';
+import { formatDate } from '../../utils/formatDate';
+
 export interface DataListProps extends TransactionCardProps {
     id: string;
 }
 
 export function Dashboard() {
+    const collectionKey = '@gofinances:transactions';
 
+    const [transactions, setTransactions] = useState<DataListProps[]>([]);[
 
-    // useEffect(() => {
+    ]
+    async function loadTransactions() {
+        const response = await AsyncStorage.getItem(collectionKey);
 
-    //     async function getTransaction() {
-    //         const data = await AsyncStorage.getItem(collectionKey);
-    //         if (data) {
-    //             console.log(JSON.parse(data))
+        const storageTransactions = response ? JSON.parse(response) : [];
 
-    //         }
-    //     }
+        if (storageTransactions.length > 0) {
+            const transactionsFormatted: DataListProps[] = storageTransactions.map((item: DataListProps) => {
+                const amountFormatted = formatAmountToReal(item.amount);
+                const dateFormatted = formatDate(item.date);
+                console.log(item)
 
+                return {
+                    id: item.id,
+                    name: item.name,
+                    amount: amountFormatted,
+                    type: item.type,
+                    category: item.category,
+                    date: dateFormatted
+                }
 
-    //     getTransaction();
-    // }, [])
+            });
 
-    const data: DataListProps[] = [
-        {
-            id: '1',
-            type: "positive",
-            title: "Desenvolvimento de site",
-            amount: "R$ 12.000,00",
-            category: {
-                name: 'Vendas',
-                icon: 'dollar-sign'
-            },
-            date: "13/04/2020"
-        },
-        {
-            id: '2',
-            type: "negative",
-            title: "Hamburgueria Pizzy",
-            amount: "R$ 59,00",
-            category: {
-                name: 'Alimentação',
-                icon: 'coffee'
-            },
-            date: "10/04/2020"
-        },
-        {
-            id: '3',
-            type: "negative",
-            title: "Aluguel do apartamento",
-            amount: "R$ 1.200,00",
-            category: {
-                name: 'Casa',
-                icon: 'shopping-bag'
-            },
-            date: "10/04/2020"
-        },
-    ];
+            console.log(transactionsFormatted)
+
+            setTransactions(transactionsFormatted);
+
+        }
+    }
+
+    useEffect(() => {
+
+        loadTransactions();
+    }, [])
+
 
     return (
         <Container>
@@ -118,7 +110,7 @@ export function Dashboard() {
             <Transactions>
                 <Title>Listagem</Title>
                 <TransactionList
-                    data={data}
+                    data={transactions}
                     keyExtractor={item => item.id}
                     renderItem={({ item }) => <TransactionCard data={item} />}
 

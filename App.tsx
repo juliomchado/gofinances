@@ -1,11 +1,12 @@
 import React from 'react';
 import AppLoading from 'expo-app-loading';
+
 import 'react-native-gesture-handler';
 
 import { ThemeProvider } from 'styled-components';
+import { NavigationContainer } from '@react-navigation/native';
 
-import { Register } from './src/screens/Register';
-import { Dashboard } from './src/screens/Dashboard';
+import { AppRoutes } from './src/routes/app.routes';
 
 import {
   useFonts,
@@ -28,7 +29,9 @@ export default function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Register />
+      <NavigationContainer>
+        <AppRoutes />
+      </NavigationContainer>
     </ThemeProvider>
 
   )

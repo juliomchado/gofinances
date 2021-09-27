@@ -1,6 +1,7 @@
 import React from 'react';
 import { HighlightCard } from '../../components/HighlightCard';
 import { TransactionCard, TransactionCardProps } from '../../components/TransactionCard';
+// import { AsyncStorage } from '@react-native-async-storage/async-storage';
 import {
     Container,
     Header,
@@ -23,6 +24,21 @@ export interface DataListProps extends TransactionCardProps {
 }
 
 export function Dashboard() {
+
+
+    // useEffect(() => {
+
+    //     async function getTransaction() {
+    //         const data = await AsyncStorage.getItem(collectionKey);
+    //         if (data) {
+    //             console.log(JSON.parse(data))
+
+    //         }
+    //     }
+
+
+    //     getTransaction();
+    // }, [])
 
     const data: DataListProps[] = [
         {

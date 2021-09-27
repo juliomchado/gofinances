@@ -32,7 +32,7 @@ import {
 } from './styles';
 
 
-type TransactionType = "up" | "down";
+type TransactionType = "positive" | "negative";
 
 interface FormData {
     name: string;
@@ -97,7 +97,7 @@ export function Register() {
             id: String(uuid.v4()),
             name: form.name,
             amount: form.amount,
-            transactionType,
+            type: transactionType,
             category: category.key,
             date: new Date()
         }
@@ -159,16 +159,16 @@ export function Register() {
                         <TransactionsTypes>
                             <TransactionTypeButton
                                 type="up"
-                                title="Income"
-                                onPress={() => handleTransactionsTypesSelect('up')}
-                                isActive={transactionType === 'up'}
+                                title="Entrada"
+                                onPress={() => handleTransactionsTypesSelect('positive')}
+                                isActive={transactionType === 'positive'}
                             />
 
                             <TransactionTypeButton
                                 type="down"
-                                title="Outcome"
-                                onPress={() => handleTransactionsTypesSelect('down')}
-                                isActive={transactionType === 'down'}
+                                title="Saída"
+                                onPress={() => handleTransactionsTypesSelect('negative')}
+                                isActive={transactionType === 'negative'}
                             />
                         </TransactionsTypes>
 

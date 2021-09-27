@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { HighlightCard } from '../../components/HighlightCard';
 import { TransactionCard, TransactionCardProps } from '../../components/TransactionCard';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {
     Container,
@@ -22,18 +21,19 @@ import {
 
 import { formatAmountToReal } from '../../utils/formatAmountToReal';
 import { formatDate } from '../../utils/formatDate';
+import { useFocusEffect } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export interface DataListProps extends TransactionCardProps {
     id: string;
 }
 
 export function Dashboard() {
-    const collectionKey = '@gofinances:transactions';
 
-    const [transactions, setTransactions] = useState<DataListProps[]>([]);[
+    const [transactions, setTransactions] = useState<DataListProps[]>([]);
 
-    ]
     async function loadTransactions() {
+        const collectionKey = '@gofinances:transactions';
         const response = await AsyncStorage.getItem(collectionKey);
 
         const storageTransactions = response ? JSON.parse(response) : [];
@@ -63,9 +63,14 @@ export function Dashboard() {
     }
 
     useEffect(() => {
-
         loadTransactions();
     }, [])
+
+    useFocusEffect(
+        useCallback(() => {
+            loadTransactions();
+        }, [])
+    );
 
 
     return (

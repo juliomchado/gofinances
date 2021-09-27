@@ -5,6 +5,7 @@ import {
     Container,
     Header,
     UserInfo,
+    LogoutButton,
     UserWrapper,
     Avatar,
     User,
@@ -70,7 +71,9 @@ export function Dashboard() {
                             <UserName>Julio Machado</UserName>
                         </User>
                     </UserInfo>
-                    <Icon name="power" />
+                    <LogoutButton onPress={() => { }}>
+                        <Icon name="power" />
+                    </LogoutButton>
                 </UserWrapper>
             </Header>
 

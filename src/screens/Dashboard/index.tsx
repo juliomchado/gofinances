@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
+import { ActivityIndicator } from 'react-native';
 import { HighlightCard } from '../../components/HighlightCard';
 import { TransactionCard, TransactionCardProps } from '../../components/TransactionCard';
 
@@ -17,12 +18,14 @@ import {
     Title,
     TransactionList,
     Transactions,
+    LoadContainer,
 } from './styles';
 
 import { formatAmountToReal } from '../../utils/formatAmountToReal';
 import { formatDate } from '../../utils/formatDate';
 import { useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useTheme } from 'styled-components';
 
 export interface DataListProps extends TransactionCardProps {
     id: string;
@@ -39,9 +42,11 @@ interface HighlightData {
 }
 
 export function Dashboard() {
-
+    const [isLoading, setIsLoading] = useState(true);
     const [transactions, setTransactions] = useState<DataListProps[]>([]);
     const [highlightData, setHighlightData] = useState<HighlightData>({} as HighlightData);
+
+    const theme = useTheme();
 
     async function loadTransactions() {
         const collectionKey = '@gofinances:transactions';
@@ -90,6 +95,7 @@ export function Dashboard() {
             });
 
             setTransactions(transactionsFormatted);
+            setIsLoading(false);
 
         }
     }
@@ -107,53 +113,63 @@ export function Dashboard() {
 
     return (
         <Container>
-            <Header>
-                <UserWrapper>
-                    <UserInfo>
-                        <Avatar source={{ uri: 'https://avatars.githubusercontent.com/u/56945282?v=4' }} />
-                        <User>
-                            <UserGreeting>Olá,</UserGreeting>
-                            <UserName>Julio Machado</UserName>
-                        </User>
-                    </UserInfo>
-                    <LogoutButton onPress={() => { }}>
-                        <Icon name="power" />
-                    </LogoutButton>
-                </UserWrapper>
-            </Header>
+            {isLoading ?
+                (
+                    <LoadContainer>
+                        <ActivityIndicator color={theme.colors.primary} />
+                    </LoadContainer>
+                )
+                : (
+                    <>
+                        <Header>
+                            <UserWrapper>
+                                <UserInfo>
+                                    <Avatar source={{ uri: 'https://avatars.githubusercontent.com/u/56945282?v=4' }} />
+                                    <User>
+                                        <UserGreeting>Olá,</UserGreeting>
+                                        <UserName>Julio Machado</UserName>
+                                    </User>
+                                </UserInfo>
+                                <LogoutButton onPress={() => { }}>
+                                    <Icon name="power" />
+                                </LogoutButton>
+                            </UserWrapper>
+                        </Header>
 
-            <HighlightCards>
-                <HighlightCard
-                    type="up"
-                    title="Entradas"
-                    amount={highlightData?.entries?.amount}
-                    lastTransaction="Última entrada dia 13 de abril"
-                />
-                <HighlightCard
-                    type="down"
-                    title="Saídas"
-                    amount={highlightData?.outs?.amount}
-                    lastTransaction="Última entrada dia 03 de abril"
-                />
-                <HighlightCard
-                    type="total"
-                    title="Total"
-                    amount={highlightData?.total?.amount}
-                    lastTransaction="01 à 16 de abril"
-                />
-            </HighlightCards>
+                        <HighlightCards>
+                            <HighlightCard
+                                type="up"
+                                title="Entradas"
+                                amount={highlightData?.entries?.amount}
+                                lastTransaction="Última entrada dia 13 de abril"
+                            />
+                            <HighlightCard
+                                type="down"
+                                title="Saídas"
+                                amount={highlightData?.outs?.amount}
+                                lastTransaction="Última entrada dia 03 de abril"
+                            />
+                            <HighlightCard
+                                type="total"
+                                title="Total"
+                                amount={highlightData?.total?.amount}
+                                lastTransaction="01 à 16 de abril"
+                            />
+                        </HighlightCards>
 
 
-            <Transactions>
-                <Title>Listagem</Title>
-                <TransactionList
-                    data={transactions}
-                    keyExtractor={item => item.id}
-                    renderItem={({ item }) => <TransactionCard data={item} />}
+                        <Transactions>
+                            <Title>Listagem</Title>
+                            <TransactionList
+                                data={transactions}
+                                keyExtractor={item => item.id}
+                                renderItem={({ item }) => <TransactionCard data={item} />}
 
-                />
-            </Transactions>
+                            />
+                        </Transactions>
 
+                    </>
+                )}
         </Container >
     )
 }

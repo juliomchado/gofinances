@@ -1,4 +1,4 @@
-export function formatAmountToReal(value: string) {
+export function formatAmountToReal(value: string | number) {
     const amount = Number(value)
         .toLocaleString('pt-BR', {
             style: 'currency',

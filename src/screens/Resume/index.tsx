@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { VictoryPie } from 'victory-native';
@@ -22,6 +22,8 @@ import { formatAmountToReal } from '../../utils/formatAmountToReal';
 import { useTheme } from 'styled-components';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useFocusEffect } from '@react-navigation/native';
+import { addMonths, subMonths } from 'date-fns';
+import { formatMonthSelectDate } from '../../utils/formatMonthSelectDate';
 
 interface TransactionData {
     type: 'positive' | 'negative';
@@ -40,19 +42,63 @@ interface CategoryData {
     percent: string;
 }
 
+interface DateProps {
+    date: Date;
+    formattedDate: string;
+}
+
+
+
 export function Resume() {
+    const [selectedDate, setSelectedDate] = useState<DateProps>({
+        date: new Date(),
+        formattedDate: formatMonthSelectDate(new Date())
+    });
+
     const [totalByCategories, setTotalByCategories] = useState<CategoryData[]>([]);
+
     const theme = useTheme();
+
+
+    function handleDateChange(action: 'next' | 'prev') {
+
+        if (action === 'next') {
+
+            const newDate = addMonths(selectedDate.date, 1);
+            const newFormattedDate = formatMonthSelectDate(newDate);
+
+            const newStateDate = {
+                date: newDate,
+                formattedDate: newFormattedDate,
+            }
+
+            setSelectedDate(newStateDate);
+
+        } else {
+            const newDate = subMonths(selectedDate.date, 1);
+            const newFormattedDate = formatMonthSelectDate(newDate);
+            const newStateDate = {
+                date: newDate,
+                formattedDate: newFormattedDate,
+            }
+
+            setSelectedDate(newStateDate);
+        }
+
+    }
+
 
     async function loadData() {
         const collectionKey = '@gofinances:transactions';
         const response = await AsyncStorage.getItem(collectionKey);
         const responseFormatted = response ? JSON.parse(response) : [];
 
-
         const expensives = responseFormatted.
             filter((expensive: TransactionData) =>
-                expensive.type === 'negative');
+                expensive.type === 'negative'
+                && new Date(expensive.date).getMonth() === selectedDate.date.getMonth()
+                && new Date(expensive.date).getFullYear() === selectedDate.date.getFullYear()
+            );
 
         const expensivesTotal = expensives
             .reduce((accumulator: number, expensive: TransactionData) => {
@@ -95,7 +141,7 @@ export function Resume() {
     useFocusEffect(
         useCallback(() => {
             loadData();
-        }, [])
+        }, [selectedDate])
     );
 
 
@@ -115,13 +161,14 @@ export function Resume() {
             >
 
                 <MonthSelect>
-                    <MonthSelectButton>
+                    <MonthSelectButton onPress={() => handleDateChange('prev')}>
                         <MonthSelectIcon name="chevron-left" />
                     </MonthSelectButton>
 
-                    <Month>Maio</Month>
+                    <Month>{selectedDate.formattedDate}</Month>
 
-                    <MonthSelectButton>
+                    <MonthSelectButton onPress={() => handleDateChange('next')}>
+
                         <MonthSelectIcon name="chevron-right" />
                     </MonthSelectButton>
                 </MonthSelect>

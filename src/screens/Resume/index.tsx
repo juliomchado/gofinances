@@ -53,7 +53,7 @@ interface DateProps {
 
 
 export function Resume() {
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
     const [selectedDate, setSelectedDate] = useState<DateProps>({
         date: new Date(),
         formattedDate: formatMonthSelectDate(new Date())
@@ -65,8 +65,6 @@ export function Resume() {
 
 
     function handleDateChange(action: 'next' | 'prev') {
-
-        setIsLoading(true);
 
         if (action === 'next') {
 
@@ -95,6 +93,8 @@ export function Resume() {
 
 
     async function loadData() {
+        setIsLoading(true);
+
         const collectionKey = '@gofinances:transactions';
         const response = await AsyncStorage.getItem(collectionKey);
         const responseFormatted = response ? JSON.parse(response) : [];
@@ -145,15 +145,10 @@ export function Resume() {
 
     }
 
-    useEffect(() => {
-        loadData();
-    }, [selectedDate])
-
-
     useFocusEffect(
         useCallback(() => {
             loadData();
-        }, [])
+        }, [selectedDate])
     );
 
     return (

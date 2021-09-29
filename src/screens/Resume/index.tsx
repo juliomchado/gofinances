@@ -23,10 +23,10 @@ import { categories } from './../../utils/categories';
 import { formatAmountToReal } from '../../utils/formatAmountToReal';
 import { useTheme } from 'styled-components';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
-import { useFocusEffect } from '@react-navigation/native';
 import { addMonths, subMonths } from 'date-fns';
 import { formatMonthSelectDate } from '../../utils/formatMonthSelectDate';
 import { Loading } from '../../components/Form/Loading';
+import { useFocusEffect } from '@react-navigation/native';
 
 interface TransactionData {
     type: 'positive' | 'negative';
@@ -145,12 +145,16 @@ export function Resume() {
 
     }
 
+    useEffect(() => {
+        loadData();
+    }, [selectedDate])
+
+
     useFocusEffect(
         useCallback(() => {
             loadData();
-        }, [selectedDate])
+        }, [])
     );
-
 
     return (
         <Container>
@@ -195,7 +199,8 @@ export function Resume() {
                                     fill: theme.colors.shape
                                 }
                             }}
-                            labelRadius={90}
+                            labelRadius={70}
+
                             x="percent"
                             y="total"
                         />

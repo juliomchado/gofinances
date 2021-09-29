@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { VictoryPie } from 'victory-native';
@@ -11,11 +11,17 @@ import {
     Header,
     Content,
     ChartContainer,
+    MonthSelect,
+    MonthSelectButton,
+    MonthSelectIcon,
+    Month,
 } from './styles';
 
 import { categories } from './../../utils/categories';
 import { formatAmountToReal } from '../../utils/formatAmountToReal';
 import { useTheme } from 'styled-components';
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import { useFocusEffect } from '@react-navigation/native';
 
 interface TransactionData {
     type: 'positive' | 'negative';
@@ -86,10 +92,12 @@ export function Resume() {
 
     }
 
-    useEffect(() => {
-        loadData();
+    useFocusEffect(
+        useCallback(() => {
+            loadData();
+        }, [])
+    );
 
-    }, []);
 
     return (
         <Container>
@@ -97,7 +105,27 @@ export function Resume() {
                 <Title>Resumo por categoria</Title>
             </Header>
 
-            <Content>
+            <Content
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={{
+                    paddingHorizontal: 24,
+                    paddingBottom: useBottomTabBarHeight() + 8,
+                }}
+
+            >
+
+                <MonthSelect>
+                    <MonthSelectButton>
+                        <MonthSelectIcon name="chevron-left" />
+                    </MonthSelectButton>
+
+                    <Month>Maio</Month>
+
+                    <MonthSelectButton>
+                        <MonthSelectIcon name="chevron-right" />
+                    </MonthSelectButton>
+                </MonthSelect>
+
                 <ChartContainer>
                     <VictoryPie
                         data={totalByCategories}

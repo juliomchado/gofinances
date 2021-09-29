@@ -43,7 +43,7 @@ export const MonthSelect = styled.View`
     width: 100%;
 
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: space-between;                                                                                       n;
     align-items: center;
 
     margin-top: 24px;

@@ -1,5 +1,4 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { ActivityIndicator } from 'react-native';
 import { HighlightCard } from '../../components/HighlightCard';
 import { TransactionCard, TransactionCardProps } from '../../components/TransactionCard';
 
@@ -18,14 +17,13 @@ import {
     Title,
     TransactionList,
     Transactions,
-    LoadContainer,
 } from './styles';
 
 import { formatAmountToReal } from '../../utils/formatAmountToReal';
 import { formatDate } from '../../utils/formatDate';
 import { useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useTheme } from 'styled-components';
+import { Loading } from '../../components/Form/Loading';
 
 export interface DataListProps extends TransactionCardProps {
     id: string;
@@ -46,8 +44,6 @@ export function Dashboard() {
     const [isLoading, setIsLoading] = useState(true);
     const [transactions, setTransactions] = useState<DataListProps[]>([]);
     const [highlightData, setHighlightData] = useState<HighlightData>({} as HighlightData);
-
-    const theme = useTheme();
 
     function getLastTransactionDate(
         collection: DataListProps[],
@@ -139,9 +135,7 @@ export function Dashboard() {
         <Container>
             {isLoading ?
                 (
-                    <LoadContainer>
-                        <ActivityIndicator color={theme.colors.primary} />
-                    </LoadContainer>
+                    <Loading />
                 )
                 : (
                     <>

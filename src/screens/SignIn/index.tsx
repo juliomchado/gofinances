@@ -16,9 +16,10 @@ import {
 
 import { RFValue } from 'react-native-responsive-fontsize';
 import { SignInSocialButton } from '../../components/SigInSocialButton';
+import { useAuth } from '../../hooks/useAuth';
 
 export function SignIn() {
-
+    const { user } = useAuth();
 
     return (
         <Container>

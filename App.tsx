@@ -21,6 +21,7 @@ import {
   Poppins_700Bold
 } from '@expo-google-fonts/poppins';
 import theme from './src/global/styles/theme';
+import { AuthProvider } from './src/contexts/AuthContext';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -41,7 +42,9 @@ export default function App() {
           backgroundColor="transparent"
           translucent
         />
-        <SignIn />
+        <AuthProvider>
+          <SignIn />
+        </AuthProvider>
       </NavigationContainer>
     </ThemeProvider>
 

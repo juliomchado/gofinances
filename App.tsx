@@ -9,6 +9,8 @@ import { NavigationContainer } from '@react-navigation/native';
 
 import { AppRoutes } from './src/routes/app.routes';
 
+import { SignIn } from './src/screens/SignIn'
+
 import 'intl';
 import 'intl/locale-data/jsonp/pt-BR';
 
@@ -39,7 +41,7 @@ export default function App() {
           backgroundColor="transparent"
           translucent
         />
-        <AppRoutes />
+        <SignIn />
       </NavigationContainer>
     </ThemeProvider>
 

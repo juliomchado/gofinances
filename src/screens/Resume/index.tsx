@@ -168,8 +168,7 @@ export function Resume() {
                     }}
 
                 >
-
-
+                    
                     <MonthSelect>
                         <MonthSelectButton onPress={() => handleDateChange('prev')}>
                             <MonthSelectIcon name="chevron-left" />

@@ -31,13 +31,12 @@ export function SignIn() {
             return await signInWithGoogle();
 
         } catch (err) {
-
             console.log(err);
 
             Alert.alert('Não foi possível contectar a conta Google');
-        } finally {
             setIsLoading(false);
         }
+
 
     }
 
@@ -47,13 +46,12 @@ export function SignIn() {
             return await signInWithApple();
 
         } catch (err) {
-
             console.log(err);
 
             Alert.alert('Não foi possível contectar a conta Apple');
-        } finally {
             setIsLoading(false);
         }
+
 
     }
 

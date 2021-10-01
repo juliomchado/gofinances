@@ -52,9 +52,16 @@ export function Dashboard() {
         collection: DataListProps[],
         type: 'positive' | 'negative'
     ) {
+
+        const collectionFiltered = collection
+            .filter(transaction => transaction.type === type);
+
+        if (collectionFiltered.length === 0) {
+            return 0;
+        }
+
         const lastTransaction = new Date(
-            Math.max.apply(Math, collection
-                .filter(transaction => transaction.type === type)
+            Math.max.apply(Math, collectionFiltered
                 .map(transaction => new Date(transaction.date).getTime())))
 
         return `${lastTransaction.getDate()} de ${lastTransaction.toLocaleString('pt-BR', { month: 'long' })}`;
@@ -96,18 +103,24 @@ export function Dashboard() {
 
         const lastTransactionEntries = getLastTransactionDate(storageTransactions, 'positive');
         const lastTransactionOuts = getLastTransactionDate(storageTransactions, 'negative');
-        const totalInterval = `01 a ${lastTransactionOuts}`
+        const totalInterval = lastTransactionOuts === 0
+            ? 'Não há transações'
+            : `01 a ${lastTransactionOuts}`
 
         const total = entriesTotal - expensiveTotal;
 
         setHighlightData({
             entries: {
                 amount: formatAmountToReal(entriesTotal),
-                lastTransaction: `Ùltima entrada dia ${lastTransactionEntries}`
+                lastTransaction: lastTransactionEntries === 0
+                    ? 'Não há transações'
+                    : `Ùltima entrada dia ${lastTransactionEntries} `
             },
             outs: {
                 amount: formatAmountToReal(expensiveTotal),
-                lastTransaction: `Ùltima saída dia ${lastTransactionOuts}`
+                lastTransaction: lastTransactionOuts === 0
+                    ? 'Não há transações'
+                    : `Ùltima saída dia ${lastTransactionOuts} `
 
             },
             total: {

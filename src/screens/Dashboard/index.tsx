@@ -192,6 +192,7 @@ export function Dashboard() {
                         <Transactions>
                             <Title>Listagem</Title>
                             <TransactionList
+                                inverted
                                 data={transactions}
                                 keyExtractor={item => item.id}
                                 renderItem={({ item }) => <TransactionCard data={item} />}

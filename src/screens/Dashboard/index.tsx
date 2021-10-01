@@ -62,62 +62,59 @@ export function Dashboard() {
         const response = await AsyncStorage.getItem(collectionKey);
         const storageTransactions = response ? JSON.parse(response) : [];
 
-        if (storageTransactions.length > 0) {
 
-            let entriesTotal = 0;
-            let expensiveTotal = 0;
+        let entriesTotal = 0;
+        let expensiveTotal = 0;
 
-            const transactionsFormatted: DataListProps[] =
-                storageTransactions.map((item: DataListProps) => {
-                    const amountFormatted = formatAmountToReal(item.amount);
-                    const dateFormatted = formatDate(item.date);
+        const transactionsFormatted: DataListProps[] =
+            storageTransactions.map((item: DataListProps) => {
+                const amountFormatted = formatAmountToReal(item.amount);
+                const dateFormatted = formatDate(item.date);
 
-                    if (item.type === 'positive') {
-                        entriesTotal += Number(item.amount);
-                    } else {
-                        expensiveTotal += Number(item.amount);
-                    }
-
-                    return {
-                        id: item.id,
-                        name: item.name,
-                        amount: amountFormatted,
-                        type: item.type,
-                        category: item.category,
-                        date: dateFormatted
-                    }
-
-                });
-
-
-            setTransactions(transactionsFormatted);
-
-            const lastTransactionEntries = getLastTransactionDate(storageTransactions, 'positive');
-            const lastTransactionOuts = getLastTransactionDate(storageTransactions, 'negative');
-            const totalInterval = `01 a ${lastTransactionOuts}`
-
-            const total = entriesTotal - expensiveTotal;
-
-            setHighlightData({
-                entries: {
-                    amount: formatAmountToReal(entriesTotal),
-                    lastTransaction: `Ùltima entrada dia ${lastTransactionEntries}`
-
-                },
-                outs: {
-                    amount: formatAmountToReal(expensiveTotal),
-                    lastTransaction: `Ùltima saída dia ${lastTransactionOuts}`
-
-                },
-                total: {
-                    amount: formatAmountToReal(total),
-                    lastTransaction: totalInterval
+                if (item.type === 'positive') {
+                    entriesTotal += Number(item.amount);
+                } else {
+                    expensiveTotal += Number(item.amount);
                 }
+
+                return {
+                    id: item.id,
+                    name: item.name,
+                    amount: amountFormatted,
+                    type: item.type,
+                    category: item.category,
+                    date: dateFormatted
+                }
+
             });
 
-            setIsLoading(false);
 
-        }
+        setTransactions(transactionsFormatted);
+
+        const lastTransactionEntries = getLastTransactionDate(storageTransactions, 'positive');
+        const lastTransactionOuts = getLastTransactionDate(storageTransactions, 'negative');
+        const totalInterval = `01 a ${lastTransactionOuts}`
+
+        const total = entriesTotal - expensiveTotal;
+
+        setHighlightData({
+            entries: {
+                amount: formatAmountToReal(entriesTotal),
+                lastTransaction: `Ùltima entrada dia ${lastTransactionEntries}`
+            },
+            outs: {
+                amount: formatAmountToReal(expensiveTotal),
+                lastTransaction: `Ùltima saída dia ${lastTransactionOuts}`
+
+            },
+            total: {
+                amount: formatAmountToReal(total),
+                lastTransaction: totalInterval
+            }
+        });
+
+        setIsLoading(false);
+
     }
 
     useEffect(() => {

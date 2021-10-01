@@ -1,4 +1,9 @@
-import React, { createContext, ReactNode, useState } from 'react';
+import React, {
+    createContext,
+    ReactNode,
+    useState,
+    useEffect
+} from 'react';
 
 import * as GoogleAuthSession from 'expo-auth-session';
 import * as AppleAuthentication from 'expo-apple-authentication';
@@ -31,12 +36,31 @@ interface User {
     avatar?: string;
 }
 
-const userStorageKey = '@gofinances:user';
 
 const AuthContext = createContext({} as AuthContextData);
 
 function AuthProvider({ children }: AuthProviderProps) {
     const [user, setUser] = useState<User>({} as User);
+    const [userStorageLoading, setUserStorageLoading] = useState(true);
+
+    const userStorageKey = '@gofinances:user';
+
+    useEffect(() => {
+        async function loadUserStorageData() {
+            const userStoraged = await AsyncStorage
+                .getItem(userStorageKey);
+
+            if (userStoraged) {
+                const userLogged = JSON.parse(userStoraged) as User;
+                setUser(userLogged);
+            }
+
+            setUserStorageLoading(false);
+
+        }
+
+        loadUserStorageData();
+    }, [])
 
     async function signInWithGoogle() {
         try {
@@ -102,7 +126,11 @@ function AuthProvider({ children }: AuthProviderProps) {
     }
 
     return (
-        <AuthContext.Provider value={{ user, signInWithGoogle, signInWithApple }}>
+        <AuthContext.Provider value={{
+            user,
+            signInWithGoogle,
+            signInWithApple
+        }}>
             {children}
         </AuthContext.Provider>
     )

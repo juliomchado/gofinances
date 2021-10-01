@@ -22,6 +22,8 @@ import { InputForm } from '../../components/Form/InputForm';
 import { TransactionTypeButton } from '../../components/Form/TransactionTypeButton';
 import { CategorySelect } from '../CategorySelect';
 
+import { useAuth } from './../../hooks/useAuth';
+
 import {
     Container,
     Header,
@@ -59,11 +61,11 @@ export function Register() {
         name: 'Categoria',
     }
 
-    const navigation = useNavigation<NavigationProps>();
-
     const [transactionType, setTransactionType] = useState<TransactionType | ''>('');
     const [categoryModalOpen, setCategoryModalOpen] = useState(false);
     const [category, setCategory] = useState(defaultCategory);
+
+    const navigation = useNavigation<NavigationProps>();
 
     const {
         control,
@@ -73,6 +75,8 @@ export function Register() {
     } = useForm({
         resolver: yupResolver(schema)
     });
+
+    const { user } = useAuth();
 
     function handleTransactionsTypesSelect(type: TransactionType) {
         setTransactionType(type);
@@ -104,7 +108,7 @@ export function Register() {
         }
 
         try {
-            const collectionKey = '@gofinances:transactions';
+            const collectionKey = `@gofinances:transactions_user:${user.id}`;
             const data = await AsyncStorage.getItem(collectionKey);
             const currentData = data ? JSON.parse(data) : [];
 

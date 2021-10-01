@@ -27,6 +27,7 @@ import { addMonths, subMonths } from 'date-fns';
 import { formatMonthSelectDate } from '../../utils/formatMonthSelectDate';
 import { Loading } from '../../components/Form/Loading';
 import { useFocusEffect } from '@react-navigation/native';
+import { useAuth } from './../../hooks/useAuth';
 
 interface TransactionData {
     type: 'positive' | 'negative';
@@ -62,6 +63,7 @@ export function Resume() {
     const [totalByCategories, setTotalByCategories] = useState<CategoryData[]>([]);
 
     const theme = useTheme();
+    const { user } = useAuth();
 
 
     function handleDateChange(action: 'next' | 'prev') {
@@ -95,7 +97,7 @@ export function Resume() {
     async function loadData() {
         setIsLoading(true);
 
-        const collectionKey = '@gofinances:transactions';
+        const collectionKey = `@gofinances:transactions_user:${user.id}`;
         const response = await AsyncStorage.getItem(collectionKey);
         const responseFormatted = response ? JSON.parse(response) : [];
 
@@ -168,7 +170,7 @@ export function Resume() {
                     }}
 
                 >
-                    
+
                     <MonthSelect>
                         <MonthSelectButton onPress={() => handleDateChange('prev')}>
                             <MonthSelectIcon name="chevron-left" />

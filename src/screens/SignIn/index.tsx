@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Alert } from 'react-native';
 
 import LogoSvg from '../../assets/logo.svg';
@@ -18,34 +18,41 @@ import {
 import { RFValue } from 'react-native-responsive-fontsize';
 import { SignInSocialButton } from '../../components/SigInSocialButton';
 import { useAuth } from '../../hooks/useAuth';
+import { Loading } from '../../components/Form/Loading';
 
 export function SignIn() {
+    const [isLoading, setIsLoading] = useState(false);
+
     const { signInWithGoogle, signInWithApple } = useAuth();
 
     async function handleSignInWithGoogle() {
         try {
-
-            await signInWithGoogle();
+            setIsLoading(true)
+            return await signInWithGoogle();
 
         } catch (err) {
 
             console.log(err);
 
             Alert.alert('Não foi possível contectar a conta Google');
+        } finally {
+            setIsLoading(false);
         }
 
     }
 
     async function handleSignInWithApple() {
         try {
-
-            await signInWithApple();
+            setIsLoading(true)
+            return await signInWithApple();
 
         } catch (err) {
 
             console.log(err);
 
             Alert.alert('Não foi possível contectar a conta Apple');
+        } finally {
+            setIsLoading(false);
         }
 
     }
@@ -85,6 +92,8 @@ export function SignIn() {
                         onPress={handleSignInWithApple}
                     />
                 </FooterWrapper>
+
+                {isLoading && <Loading />}
 
             </Footer>
 

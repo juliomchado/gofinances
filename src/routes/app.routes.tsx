@@ -23,7 +23,7 @@ export function AppRoutes() {
                 tabBarLabelPosition: 'beside-icon',
                 tabBarStyle: {
                     paddingVertical: Platform.OS === 'ios' ? 20 : 0,
-                    height: 64
+                    height: Platform.OS === 'ios' ? 86 : 64
 
                 }
             }}
@@ -67,6 +67,7 @@ export function AppRoutes() {
                     ))
                 }}
             />
+
         </Navigator>
     )
 }

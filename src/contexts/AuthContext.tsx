@@ -20,6 +20,8 @@ interface AuthContextData {
     user: User;
     signInWithGoogle(): Promise<void>;
     signInWithApple(): Promise<void>;
+    signOut(): Promise<void>;
+    userStorageLoading: boolean;
 }
 
 interface AuthorizationResponse {
@@ -106,12 +108,14 @@ function AuthProvider({ children }: AuthProviderProps) {
             });
 
             if (credential) {
+                const name = credential.fullName!.givenName!;
+                const avatar = `https://ui-avatars.com/api/?name=${name}&length=1`
 
                 const appleUserLogged = {
                     id: credential.user,
                     email: credential.email!,
-                    name: credential.fullName!.givenName!,
-                    avatar: undefined
+                    name,
+                    avatar,
                 }
 
                 setUser(appleUserLogged);
@@ -125,11 +129,18 @@ function AuthProvider({ children }: AuthProviderProps) {
         }
     }
 
+    async function signOut() {
+        setUser({} as User);
+        await AsyncStorage.removeItem(userStorageKey);
+    }
+
     return (
         <AuthContext.Provider value={{
             user,
+            userStorageLoading,
             signInWithGoogle,
-            signInWithApple
+            signInWithApple,
+            signOut
         }}>
             {children}
         </AuthContext.Provider>
